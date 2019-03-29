@@ -126,19 +126,7 @@ class ViewController: UIViewController {
     
     @IBAction func Calculate(_ sender: Any) {
         Distance.text = ""
-        //createMatrix(list: list)
-//        let nodeA = Node(name: "A")
-//        let nodeB = Node(name: "B")
-//        let nodeC = Node(name: "C")
-//        let nodeD = Node(name: "D")
-//        let nodeE = Node(name: "E")
-//
-//        nodeA.connections.append(Connection(from: nodeA, to: nodeB, distance: 1))
-//        nodeB.connections.append(Connection(from: nodeB, to: nodeC, distance: 3))
-//        nodeC.connections.append(Connection(from: nodeC, to: nodeD, distance: 1))
-//        nodeB.connections.append(Connection(from: nodeB, to: nodeE, distance: 1))
-//        nodeE.connections.append(Connection(from: nodeE, to: nodeC, distance: 1))
-        
+        //createMatrix(list: list)        
         let sourceNode = getNode(NodeName: TextViewFrom.text!)
         let destinationNode = getNode(NodeName: TextViewTo.text!)
         
@@ -193,8 +181,32 @@ class ViewController: UIViewController {
         
         
         //create Node
-        let FromNode = Node(name: TextViewFrom.text!)
-        let ToNode = Node(name: TextViewTo.text!)
+        var FromNode = Node(name: TextViewFrom.text!)
+        var ToNode = Node(name: TextViewTo.text!)
+        
+        //Check if the nodes already in the list
+        if (listNode.isEmpty)
+        {
+            listNode.append(FromNode)
+            listNode.append(ToNode)
+        }
+        else
+        {
+            for TestNode: Node in listNode
+            {
+                if (FromNode == TestNode){
+                    FromNode = TestNode
+                    break
+                }
+                else{listNode.append(FromNode)}
+                
+                if (ToNode == TestNode){
+                    ToNode = TestNode
+                    break
+                }
+                else{listNode.append(ToNode)}
+            }
+        }
         
         //create Matrix
         createMatrix(FromNode: FromNode, ToNode: ToNode)
@@ -205,35 +217,28 @@ class ViewController: UIViewController {
     }
     
     func createMatrix(FromNode: Node, ToNode: Node) -> Array<Node> {
-        //Check if the nodes already in the list
-        let FromNodeName = TextViewFrom.text
-        let ToNodeName = TextViewTo.text
-        
-        if (FromNode != listNode.first(where:{$0.name == FromNodeName})){
-            listNode.append(FromNode)
-            
-        }
-
-        if (ToNode != listNode.first(where:{$0.name == ToNodeName})){
-            listNode.append(ToNode)
-            
-        }
-        
         var testConnection = Connection(from: FromNode, to: ToNode, distance: Double(Distance.text!)!)
         
-        FromNode.connections.append(testConnection)
-       
-         for x in FromNode.connections{
-            if (testConnection == x){
-                test1.text = "Duplicated Node"
-                break
+        // Check if the connections Array is not null, an array must be not null to do a loop
+        if (FromNode.connections.isEmpty)
+        {
+            FromNode.connections.append(testConnection)
+            TextViewDistance.text = "Flight Added: "+testConnection.from.name+" To "+testConnection.to.name
+        }
+        else
+        {
+            for object:Connection in FromNode.connections{
+                if (testConnection == object){
+                    TextViewDistance.text = "Duplicated Flight!"
+                    test2.text = ""
+                    break
+                }
+                else{
+                    FromNode.connections.append(testConnection)
+                    TextViewDistance.text = "Flight Added: "+testConnection.from.name+" To "+testConnection.to.name
+                    test2.text = ""
+                }
             }
-            else{
-                FromNode.connections.append(testConnection)
-                test1.text = "this is from Node: "+FromNode.name
-                test2.text = "This is toNode:"+ToNode.name
-            }
-            
         }
         return listNode
     }
