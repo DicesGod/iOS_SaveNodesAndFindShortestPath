@@ -82,33 +82,16 @@
                                     <action selector="Calculate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7hc-b9-aLl"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZSR-Wu-Gpv">
-                                <rect key="frame" x="47" y="367" width="269" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tx8-du-vxl">
-                                <rect key="frame" x="47" y="415" width="269" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="Button" destination="1gf-Qj-QXA" id="FWt-bC-18g"/>
-                        <outlet property="Distance" destination="tob-9X-ZPh" id="ltQ-Ut-iNH"/>
-                        <outlet property="Result" destination="6Su-MO-Q1a" id="h6a-kh-V8c"/>
-                        <outlet property="TextViewDistance" destination="6Su-MO-Q1a" id="9i5-wc-CC0"/>
+                        <outlet property="TextViewDistance" destination="tob-9X-ZPh" id="lw1-Fu-wFI"/>
                         <outlet property="TextViewFrom" destination="XNf-Eq-fO2" id="hKs-Ig-YR0"/>
+                        <outlet property="TextViewResult" destination="6Su-MO-Q1a" id="L28-9o-4hj"/>
                         <outlet property="TextViewTo" destination="GCX-Sk-oP4" id="2D2-7A-foI"/>
-                        <outlet property="test1" destination="ZSR-Wu-Gpv" id="xey-4N-yYZ"/>
-                        <outlet property="test2" destination="Tx8-du-vxl" id="Rgy-Cs-X4Z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
