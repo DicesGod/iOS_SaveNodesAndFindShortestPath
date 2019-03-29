@@ -27,13 +27,21 @@ class Node: Equatable {
         }
 }
 
-class Connection {
+class Connection: Equatable {
+    static func == (lhs: Connection, rhs: Connection) -> Bool {
+        if(lhs.from.name == rhs.from.name && lhs.to.name == rhs.to.name)
+        {
+            return true
+        }
+        else {return false}
+    }
+    
     public let from: Node
     public let to: Node
     public let distance: Double
     
     public init(from: Node, to: Node, distance: Double) {
-        assert(distance >= 0, "Distance has to be equal or greater than zero")
+        //assert(distance >= 0, "Distance has to be equal or greater than zero")
         self.from = from
         self.to = to
         self.distance = distance
@@ -125,20 +133,14 @@ class ViewController: UIViewController {
 //        let nodeD = Node(name: "D")
 //        let nodeE = Node(name: "E")
 //
-//        nodeA.connections.append(Connection(to: nodeB, distance: 1))
-//        nodeB.connections.append(Connection(to: nodeC, distance: 3))
-//        nodeC.connections.append(Connection(to: nodeD, distance: 1))
-//        nodeB.connections.append(Connection(to: nodeE, distance: 1))
-//        nodeE.connections.append(Connection(to: nodeC, distance: 1))
-        //nodeA.connections.append(Connection(to: node, distance: 1))
+//        nodeA.connections.append(Connection(from: nodeA, to: nodeB, distance: 1))
+//        nodeB.connections.append(Connection(from: nodeB, to: nodeC, distance: 3))
+//        nodeC.connections.append(Connection(from: nodeC, to: nodeD, distance: 1))
+//        nodeB.connections.append(Connection(from: nodeB, to: nodeE, distance: 1))
+//        nodeE.connections.append(Connection(from: nodeE, to: nodeC, distance: 1))
         
-       
         let sourceNode = getNode(NodeName: TextViewFrom.text!)
         let destinationNode = getNode(NodeName: TextViewTo.text!)
-      
-        
-        
-        
         
         let path = shortestPath(source: sourceNode, destination: destinationNode)
         
@@ -219,22 +221,19 @@ class ViewController: UIViewController {
         
         var testConnection = Connection(from: FromNode, to: ToNode, distance: Double(Distance.text!)!)
         
-        var check = true
-         for testConnection in FromNode.connections{
-            if (testConnection == FromNode.connections[testConnection]){
-                check = true}
+        FromNode.connections.append(testConnection)
+       
+         for x in FromNode.connections{
+            if (testConnection == x){
+                test1.text = "Duplicated Node"
                 break
-            else {check = false}
-        }
-        
-//        if (FromNode.connections.contains(where: {testConnection in FromNode.connections
-//            return true
-//        })){}
-        
-        for testConnection in FromNode.connections{
-            FromNode.connections.append(testConnection)
-            test1.text = "this is from Node: "+FromNode.name
-            test2.text = "This is toNode:"+ToNode.name
+            }
+            else{
+                FromNode.connections.append(testConnection)
+                test1.text = "this is from Node: "+FromNode.name
+                test2.text = "This is toNode:"+ToNode.name
+            }
+            
         }
         return listNode
     }
