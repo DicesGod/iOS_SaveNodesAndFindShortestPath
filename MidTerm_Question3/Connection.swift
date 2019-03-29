@@ -1,11 +1,3 @@
-//
-//  Connection.swift
-//  MidTerm_Question3
-//
-//  Created by Minh Le on 2019-03-29.
-//  Copyright © 2019 Minh Le. All rights reserved.
-//
-
 import Foundation
 
 class Connection: Equatable {
@@ -17,11 +9,11 @@ class Connection: Equatable {
         else {return false}
     }
     
-    public let from: Node
-    public let to: Node
+    public let from: Location
+    public let to: Location
     public let distance: Double
     
-    public init(from: Node, to: Node, distance: Double) {
+    public init(from: Location, to: Location, distance: Double) {
         //assert(distance >= 0, "Distance has to be equal or greater than zero")
         self.from = from
         self.to = to

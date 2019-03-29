@@ -11,9 +11,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var connections: [Connection] = []
     
-
     @IBOutlet weak var TextViewFrom: UITextField!
     
     @IBOutlet weak var TextViewTo: UITextField!
@@ -24,29 +22,22 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var Button: UIButton!
     
-    @IBOutlet weak var Result: UITextField!
+    var listLocation: [Location] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
     
-    func getNode(NodeName: String) -> Node {
-        let Node = listNode.first(where:{$0.name == NodeName})
-        return Node!
-    }
-    
     @IBAction func Calculate(_ sender: Any) {
         TextViewResult.text = ""
-
-        let sourceNode = getNode(NodeName: TextViewFrom.text!)
         
-        let destinationNode = getNode(NodeName: TextViewTo.text!)
+        let sourceLocation = Location.getLocation(LocationName: TextViewFrom.text!, listLocation: listLocation)
+        let destinationLocation = Location.getLocation(LocationName: TextViewTo.text!,listLocation: listLocation)
         
+        let path = Path.shortestPath(source: sourceLocation, destination: destinationLocation, listLocation: listLocation)
         
-        let path = shortestPath(source: sourceNode, destination: destinationNode)
-        
-        if let succession: [String] = path?.array.reversed().flatMap({ $0 as? Node}).map({$0.name}) {
+        if let succession: [String] = path?.array.reversed().flatMap({ $0 as? Location}).map({$0.name}) {
             for i in succession{
                 TextViewResult.text! += i}
             
@@ -54,111 +45,69 @@ class ViewController: UIViewController {
             TextViewResult.text = "No path"
         }
         
-        
     }
-    var listFlight: [Flight] = []
-    var listNode: [Node] = []
-   
-
-    struct Flight {
-        var from = ""
-        var to = ""
-        var distance = 0.0
-    }
-    
-    func shortestPath(source: Node, destination: Node) -> Path? {
-       
-        for i in listNode{
-            i.visited = false
-        }
-        
-        var frontier: [Path] = [] {
-            didSet { frontier.sort { return $0.cumulativeDistance < $1.cumulativeDistance } } // the frontier has to be always ordered
-        }
-        
-        frontier.append(Path(to: source)) // the frontier is made by a path that starts nowhere and ends in the source
-        
-        while !frontier.isEmpty {
-            let cheapestPathInFrontier = frontier.removeFirst() // getting the cheapest path available
-            guard !cheapestPathInFrontier.node.visited else { continue } // making sure we haven't visited the node already
-            
-            if cheapestPathInFrontier.node == destination {
-                return cheapestPathInFrontier // found the cheapest path 😎
-            }
-            
-            cheapestPathInFrontier.node.visited = true
-            
-            for connection in cheapestPathInFrontier.node.connections where !connection.to.visited { // adding new paths to our frontier
-                frontier.append(Path(to: connection.to, via: connection, previousPath: cheapestPathInFrontier))
-            }
-        } // end while
-        return nil // we didn't find a path 😣
-    }
-    
+  
     @IBAction func Add(_ sender: Any) {
-        //let distance = Int(Distance.text!)
-        listFlight.append(ViewController.Flight.init(from: TextViewFrom.text!, to: TextViewTo.text!, distance: Double(TextViewDistance.text!)!))
+    
+        //create Location
+        var FromLocation = Location(name: TextViewFrom.text!)
+        var ToLocation = Location(name: TextViewTo.text!)
         
-        
-        //create Node
-        var FromNode = Node(name: TextViewFrom.text!)
-        var ToNode = Node(name: TextViewTo.text!)
-        
-        //Check if the nodes already in the list
-        if (listNode.isEmpty)
+        //Check if the Locations already in the list
+        if (listLocation.isEmpty)
         {
-            listNode.append(FromNode)
-            listNode.append(ToNode)
+            listLocation.append(FromLocation)
+            listLocation.append(ToLocation)
         }
         else
         {
-            for TestNode: Node in listNode
+            for TestLocation: Location in listLocation
             {
-                if (FromNode == TestNode){
-                    FromNode = TestNode
+                if (FromLocation == TestLocation){
+                    FromLocation = TestLocation
                     break
                 }
-                else{listNode.append(FromNode)}
+                else{listLocation.append(FromLocation)}
                 
-                if (ToNode == TestNode){
-                    ToNode = TestNode
+                if (ToLocation == TestLocation){
+                    ToLocation = TestLocation
                     break
                 }
-                else{listNode.append(ToNode)}
+                else{listLocation.append(ToLocation)}
             }
         }
         
         //create Matrix
-        createMatrix(FromNode: FromNode, ToNode: ToNode)
+        createMatrix(FromLocation: FromLocation, ToLocation: ToLocation)
        
         TextViewFrom.text = ""
         TextViewTo.text = ""
         TextViewDistance.text = ""
+        TextViewResult.text = "Flight Added!"
     }
     
-    func createMatrix(FromNode: Node, ToNode: Node) -> Array<Node> {
-        var testConnection = Connection(from: FromNode, to: ToNode, distance: Double(TextViewDistance.text!)!)
+    func createMatrix(FromLocation: Location, ToLocation: Location) -> Void {
+        let testConnection = Connection(from: FromLocation, to: ToLocation, distance: Double(TextViewDistance.text!)!)
         
         // Check if the connections Array is not null, an array must be not null to do a loop
-        if (FromNode.connections.isEmpty)
+        if (FromLocation.connections.isEmpty)
         {
-            FromNode.connections.append(testConnection)
+            FromLocation.connections.append(testConnection)
             TextViewDistance.text = "Flight Added: "+testConnection.from.name+" To "+testConnection.to.name
         }
         else
         {
-            for object:Connection in FromNode.connections{
+            for object:Connection in FromLocation.connections{
                 if (testConnection == object){
                     TextViewDistance.text = "Duplicated Flight!"
                     break
                 }
                 else{
-                    FromNode.connections.append(testConnection)
+                    FromLocation.connections.append(testConnection)
                     TextViewDistance.text = "Flight Added: "+testConnection.from.name+" To "+testConnection.to.name
                 }
             }
         }
-        return listNode
     }
     
     
